@@ -1,0 +1,21 @@
+/*
+ * This is is imported by virtue of "sass.etc" in "app.json".
+ */
+
+em.highlight {
+	color:red;
+	font-style: normal;
+}
+
+#content p:first-child {
+	text-indent: 0em;
+}
+
+span.lb.show:after {
+	content:attr(data-lineid) ":";
+}
+
+span.lb {
+	color: #006400;
+}
+
