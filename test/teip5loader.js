@@ -3,9 +3,9 @@ var teip5loader = require('../lib/teip5loader')
 var DOMParser = require('xmldom').DOMParser;
 var fs = require('fs');
 var should = require('should');
-var xml_1=fs.readFileSync("/Users/yup/Projects/METS/XMLReader/T010001.xml",'utf8')
+var xml_1=fs.readFileSync("test/T010001.xml",'utf8')
 var xmldoc_1 = new DOMParser().parseFromString(xml_1,'text/xml');
-var xml_2=fs.readFileSync("/Users/yup/Projects/METS/XMLReader/A000001.xml",'utf8')
+var xml_2=fs.readFileSync("test/A000001.xml",'utf8')
 var xmldoc_2 = new DOMParser().parseFromString(xml_2,'text/xml');
 var XMLSerializer=require("xmldom").XMLSerializer;
 
