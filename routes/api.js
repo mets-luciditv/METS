@@ -5,7 +5,38 @@ var router = express.Router();
 var solr = require('solr-client');
 var client = solr.createClient({core:"volume"});
 var solr_CategoryByPart = solr.createClient({core:"CategoryByPart"});
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
+var path=require('path')
+var fs=require('fs')
+var teip5xml =require("../lib/teip5loader")
+router.post('/upload', upload.single('teip5xml'), function (req, res, next) {
+  console.log(req.file);
+  fs.readFile(req.file.path,'utf8',(err,xml)=>{
+        teip5xml.importXml(xml).then(function(result){
+             
+              fs.unlink(req.file.path,err=>{
+                if(err){
+                    res.json({success:false,msg:err});
+                }
+                else{
+                    if(result.responseHeader.status==0)
+                    {
+                        res.json({success:true,file:req.file.originalname});
+                    }
+                    else{
+                        res.json({success:false,msg:result});
+                    }
+                    
+                }
+            })
+        },function(err){
+            res.json({success:false,msg:err});
+        })
+  })
 
+  
+});
 router.get('/search', function(req, res, next) {
     var searchtext=req.query.q;
     var query = client.createQuery()

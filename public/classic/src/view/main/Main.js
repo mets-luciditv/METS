@@ -31,7 +31,20 @@ Ext.define('METS.view.main.Main', {
             xtype:'button',
             iconCls:'x-fa fa-bars',
             menu: [{
-                text:'Menu Item 1'
+                text:'Menu Item 1',
+                listeners:{
+                    click:function(){
+                        Ext.create('Ext.window.Window', {
+                            title: '選擇搜尋範圍',
+                            height: 600,
+                            width: 800,
+                            layout: 'fit',
+                            items: {  // Let's put an empty grid in just to illustrate fit layout
+                                xtype: 'teip5upload'
+                            }
+                        }).show();
+                    }
+                }
             },{
                 text:'Menu Item 2'
             },{

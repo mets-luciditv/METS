@@ -16,7 +16,7 @@ module.exports.add= async function (schemaName,tableName,nodes)
     for(i in nodes){
         var node=nodes[i];
         for (var k in node) {
-            if(node[k]==='' || node[k]===null){
+            if(node[k]==='' || node[k]===null || node[k]===undefined){
                 delete node[k];
             }
         }
@@ -85,7 +85,12 @@ module.exports.read = async function (schemaName,tableName,id)
     });
     return new Promise(function(resolve, reject) {
         pool.query('SELECT a.* FROM ?? a,?? b where a.lft >= b.lft and a.lft  <= b.rgt and b.id= ? order by a.lft', [tableName,tableName,id], function (error, results, fields) {
-            resolve(loadMpttTree(results));
+            if(error){
+                reject(error)
+            }else{
+                resolve(loadMpttTree(results));
+            }
+            
         });
     });
 }

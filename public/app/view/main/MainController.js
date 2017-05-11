@@ -112,7 +112,7 @@ Ext.define('METS.view.main.MainController', {
     },
     scopeClick:function ( sender , e , eOpts ) {
         var records= sender.up("treepanel").getChecked();
-        this.getViewModel().setData({scopeCustomJing_Ids:records.filter(r=>r.data.target.length >0).map(c=>c.data.target)});
+        this.getViewModel().setData({scopeCustomJing_Ids:records.filter(function(r){return r.data.target.length >0}).map(function(c){return c.data.target})});
         this.search();
         sender.up("window").close();
     }
