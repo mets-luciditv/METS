@@ -2,3 +2,8 @@
 bootstrap.json
 build/
 ext/
+public/classic.json
+public/classic.jsonp
+public/modern.json
+public/modern.jsonp
+public/sass/example/bootstrap.jsonp
