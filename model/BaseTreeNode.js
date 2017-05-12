@@ -64,8 +64,6 @@ function readRow(pool,tableName,id){
                 resolve(results[0]);
             }
         });
-        winston.info(query.sql)
-        winston.info([tableName,id])
     });
 }
 async function readChild(pool,tableName,id){
