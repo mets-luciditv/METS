@@ -23,6 +23,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, process.env.WWW_ROOT||'public')));
+app.use('/javascripts',express.static(path.join(__dirname, 'public/javascripts')));
+app.use('/images',express.static(path.join(__dirname, 'public/images')));
 app.use('/api',api);
 app.use('/api/category',category)
 app.use('/api/toc',toc)
