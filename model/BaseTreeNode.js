@@ -1,34 +1,85 @@
-
-const mysqlx = require('@mysql/xdevapi');
 const mysql      = require('mysql');
 const winston = require('winston');
 const Promise = require('promise');
 const Stack =require('stackjs')
-
+const util=require("util")
+var extend = require('util')._extend;
 module.exports.add= async function (schemaName,tableName,nodes)
 {
-    var session=await mysqlx.getSession({
-        host:process.env.dbHost,
-        port:process.env.dbPort,
-        dbUser:process.env.dbUser,
-        dbPassword:process.env.dbPassword
-    })
+    var pool  = mysql.createPool({
+        connectionLimit : 10,
+        host     : process.env.dbHost,
+        user     : process.env.dbUser,
+        password : process.env.dbPassword,
+        database : schemaName
+    });
     for(i in nodes){
         var node=nodes[i];
-        for (var k in node) {
-            if(node[k]==='' || node[k]===null || node[k]===undefined){
-                delete node[k];
-            }
-        }
-        await session.getSchema(schemaName).getTable(tableName)
-        .insert(Object.keys(node))
-        .values(Object.values(node).map(f=>f.toString()))
-        .execute();
+         await insertRow(pool,tableName,node);
     }
-    await rebuildMpttIndex(schemaName,tableName);
-    session.close();
+    await rebuildMpttIndex(pool,tableName);
 }
-
+function insertRow(pool,tableName,node){
+    
+    return new Promise(function(resolve,reject){
+        var query=pool.query("INSERT INTO ?? SET ?",[tableName,node],function (error, results, fields){
+            if(error){
+                reject(error);
+            }else{
+                resolve(results);
+            }
+        });
+    });
+}
+function deleteRow(pool,tableName,id){
+    return new Promise(function(resolve,reject){
+        var query=pool.query("DELETE FROM ?? WHERE `id` = ? ",[tableName,id],function (error, results, fields){
+            if(error){
+                reject(error);
+            }else{
+                resolve(results);
+            }
+        });
+    });
+}
+function updateRow(pool,tableName,node){
+    return new Promise(function(resolve,reject){
+        var copy=extend({},node);
+        delete copy.id;
+        var query=pool.query("UPDATE ?? SET ? WHERE `id`=?",[tableName,copy,node.id],function (error, results, fields){
+            if(error){
+                reject(error);
+            }else{
+                resolve(results);
+            }
+        });
+    });
+}
+function readRow(pool,tableName,id){
+    return new Promise(function(resolve,reject){
+        var query=pool.query("SELECT * FROM ?? WHERE `id`=?",[tableName,id],function (error, results, fields){
+            if(error){
+                reject(error);
+            }else{
+                resolve(results[0]);
+            }
+        });
+    });
+}
+async function readChild(pool,tableName,id){
+    return new Promise(function(resolve,reject){
+         pool.query('SELECT `id`,`text`,`target`,`leaf`,`index` FROM ?? WHERE `parentId` = ? Order by `index`', 
+        [tableName,id], 
+        function (error, results, fields) {
+            if(error){
+                reject(error);
+            }else{
+                resolve(results);
+            }
+        });
+    })
+   
+}
 function loadMpttTree(nodes){
     var stack=new Stack();
     for(i in nodes){
@@ -56,22 +107,18 @@ function loadMpttTree(nodes){
 }
 async function update (schemaName,tableName,nodes)
 {
-    var session=await mysqlx.getSession({
-        host:process.env.dbHost,
-        port:process.env.dbPort,
-        dbUser:process.env.dbUser,
-        dbPassword:process.env.dbPassword
-    })
+     var pool  = mysql.createPool({
+        connectionLimit : 10,
+        host     : process.env.dbHost,
+        user     : process.env.dbUser,
+        password : process.env.dbPassword,
+        database : schemaName
+    });
     for(i in nodes){
         var node=nodes[i];
-        var cmd=session.getSchema(schemaName).getTable(tableName).update().where('`id`== :id').bind({'id':node.id})
-        for(k in node){
-            cmd.set(k,node[k]);
-        }
-        await cmd.execute();
+        await updateRow(pool,tableName,node);
     }
-    await rebuildMpttIndex(schemaName,tableName);
-    session.close();
+    await rebuildMpttIndex(pool,tableName);
 }
 module.exports.update = update;
 module.exports.read = async function (schemaName,tableName,id)
@@ -89,97 +136,55 @@ module.exports.read = async function (schemaName,tableName,id)
                 reject(error)
             }else{
                 resolve(loadMpttTree(results));
-            }
-            
+            }  
         });
     });
 }
 
 module.exports.remove = async function (schemaName,tableName,ids)
 {
-    var session=await mysqlx.getSession({
-        host:process.env.dbHost,
-        port:process.env.dbPort,
-        dbUser:process.env.dbUser,
-        dbPassword:process.env.dbPassword
-    })
+    var pool  = mysql.createPool({
+        connectionLimit : 10,
+        host     : process.env.dbHost,
+        user     : process.env.dbUser,
+        password : process.env.dbPassword,
+        database : schemaName
+    });
     for(i in ids){
         var id=ids[i]
-        await session.getSchema(schemaName).getTable(tableName).delete('`id`== :id').bind({'id':id}).execute();
+        await deleteRow(pool,tableName,id);
     }
-    await rebuildMpttIndex(schemaName,tableName);
-    session.close();
+    await rebuildMpttIndex(pool,tableName);
 }
 
-async function rebuildMpttIndex(schemaName,tableName){
-    var session=await mysqlx.getSession({
-        host:process.env.dbHost,
-        port:process.env.dbPort,
-        dbUser:process.env.dbUser,
-        dbPassword:process.env.dbPassword
-    })
-    var table=session.getSchema(schemaName).getTable(tableName)
-    var rootQuery=table.select('*').where('`id` == :id').bind({"id":'root'})
-    var root={};
-    var rootRow={};
-    var rootMeta={};
-    await rootQuery.execute(function(row){
-        rootRow=row;
-    },function(meta){
-        rootMeta=meta;
-    });
-    for(i in rootMeta){
-        var column=rootMeta[i]
-        root[column.name]=rootRow[i];
-    }
-    await buildNode(table,root);
-    await sortByMPTT(schemaName,tableName,root,0);
-    session.close();
+async function rebuildMpttIndex(pool,tableName){
+    var root=await readRow(pool,tableName,'root');
+    await buildNode(pool,tableName,root);
+    await sortByMPTT(pool,tableName,root,0);
     return true;
 }
 module.exports.rebuildMpttIndex=rebuildMpttIndex;
-async function buildNode(table,node){
-    var query=table.select('id','text','target','leaf','index').where('`parentId` == :parentId').orderBy('index').bind({"parentId":node.id})
+async function buildNode(pool,tableName,node){
     node.childNodes=[];
-    var rows=[];
-    var _Meta=null;
-    await query.execute(function(row){
-        rows.push(row)
-    },function(meta){_Meta=meta;});
-
-    for(r_i in rows){
-        var child={};
-        for(m_i in _Meta){
-            child[_Meta[m_i].name]=rows[r_i][m_i];
-        }
+    var childs=await readChild(pool,tableName,node.id);
+    for(c_i in childs){
+        var child=childs[c_i];
         if(child.leaf == 0){
-            await buildNode(table,child);
+            await buildNode(pool,tableName,child);
         }
         node.childNodes.push(child);
     }
+   return Promise.resolve(true);
 }
- async function sortByMPTT(schemaName,tableName, node,left){
+ async function sortByMPTT(pool,tableName, node,left){
     var right=left+1;
     if(node.leaf ==0){
         for(var child_i in node.childNodes){
-            right = await sortByMPTT(schemaName,tableName,node.childNodes[child_i],right);
+            right = await sortByMPTT(pool,tableName,node.childNodes[child_i],right);
         }
     }
     node.lft=left;
     node.rgt=right;
-    var session=await mysqlx.getSession({
-        host:process.env.dbHost,
-        port:process.env.dbPort,
-        dbUser:process.env.dbUser,
-        dbPassword:process.env.dbPassword
-    })
- 
-    var cmd=session.getSchema(schemaName).getTable(tableName).update().where('`id`== :id').bind({'id':node.id})
-    
-    cmd.set("lft",node.lft);
-    cmd.set("rgt",node.rgt);
-    
-    await cmd.execute();
-    session.close();
+    await updateRow(pool,tableName,{id:node.id,lft:node.lft,rgt:node.rgt});
     return right+1;
 }
