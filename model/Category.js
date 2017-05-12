@@ -1,5 +1,5 @@
 const BaseTreeNode = require("./BaseTreeNode");
-const schemaName='mets';
+const schemaName='METS';
 const tableName='category'
 util = require('util');
 module.exports.add=function(nodes){
