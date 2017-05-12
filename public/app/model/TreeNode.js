@@ -1,5 +1,8 @@
 Ext.define('METS.model.TreeNode', {
     extend: 'Ext.data.TreeModel',
+    requires: [
+    	'Ext.data.identifier.Uuid'
+    ],
     identifier: 'uuid',
     fields: [
         { name: 'id', type: 'string'},

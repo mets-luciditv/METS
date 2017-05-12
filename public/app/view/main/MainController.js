@@ -16,8 +16,6 @@ Ext.define('METS.view.main.MainController', {
     	var lastQueryText=storeSearch.lastOptions.params.q;
     	var selectedId=record.data.id;
     	Ext.getCmp('content').getController().loadContext(selectedId,lastQueryText);
-
-    
     },
     onSearchClick:function(sender){
     	this.search();
@@ -61,7 +59,6 @@ Ext.define('METS.view.main.MainController', {
             var path=record.data.target;
             Ext.getCmp('content').getController().changeContext(path);
         }
-        
     },
     saveCategory:function(){
         Ext.StoreManager.lookup("sCategoryByPart").sync();
@@ -69,10 +66,10 @@ Ext.define('METS.view.main.MainController', {
     addCategoryByPartNode:function(){
         if(Ext.getCmp('categoryByPart').getSelection().length==0)
         {
-            Ext.getCmp('categoryByPart').getRootNode().appendChild(Ext.create('METS.model.TreeNode',{text:'New Node',leaf:true}))
+            Ext.getCmp('categoryByPart').getRootNode().appendChild(Ext.create('METS.model.TreeNode',{text:'New Node',leaf:true}));
         }
         else {
-            Ext.getCmp('categoryByPart').getSelection()[0].appendChild(Ext.create('METS.model.TreeNode',{text:'New Node',leaf:true}))
+            Ext.getCmp('categoryByPart').getSelection()[0].appendChild(Ext.create('METS.model.TreeNode',{text:'New Node',leaf:true}));
         }
     },
     deleteCategoryByPartNode:function(){
@@ -100,8 +97,6 @@ Ext.define('METS.view.main.MainController', {
                             xtype: 'scopecustom'
                         }
                     }).show();
-                
-
             break;
             case "scopeCurrent":
                

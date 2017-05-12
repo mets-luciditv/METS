@@ -2,7 +2,7 @@
     extend: 'Ext.panel.Panel',
     xtype: 'content',
     requires: [
-    'METS.view.main.ContentController',
+    	'METS.view.main.ContentController',
         'METS.view.main.ContentModel'
     ],
  	viewModel: 'content',
@@ -31,7 +31,6 @@
 			    		bind:{
 			    			checked:"{isOrginalLineBreak}"
 			    		}
-
               		},
               		{
               			xtype: 'menucheckitem',

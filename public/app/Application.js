@@ -5,19 +5,15 @@
  */
 Ext.define('METS.Application', {
     extend: 'Ext.app.Application',
-    
     name: 'METS',
-
     stores: [
         // TODO: add global / shared stores here
         'METS.model.Toc'
     ],
-    
     launch: function () {
         // TODO - Launch the application
         Ext.tip.QuickTipManager.init();
     },
-
     onAppUpdate: function () {
         Ext.Msg.confirm('Application Update', 'This application has an update, reload?',
             function (choice) {

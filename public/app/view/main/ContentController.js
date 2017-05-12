@@ -23,10 +23,9 @@ Ext.define('METS.view.main.ContentController', {
 					 var mainViewModel=Ext.getCmp("main").getViewModel();
 					 mainViewModel.setData({nowJingId:data.jing_id,nowJingTitle:data.jing_title,nowVolumeId:data.volume_id,nowVolumeTitle:data.volume_title});
 			         content.getViewModel().setData({html:data.html,hitFragmentCount:data.hit_fragments.length,nowHitFragmentSeq:0});
-			         content.getViewModel().notify();
-			         
-					  var storeToc = Ext.data.StoreManager.lookup('sToc');
-					    storeToc.setDefaultRootId(data.jing_id)
+			         content.getViewModel().notify();         
+					 var storeToc = Ext.data.StoreManager.lookup('sToc');
+					 storeToc.setDefaultRootId(data.jing_id);
 
 			         storeToc.reload({
 			            params : {
@@ -34,7 +33,7 @@ Ext.define('METS.view.main.ContentController', {
 			            }
 			         });
 					  var storeTov = Ext.data.StoreManager.lookup('sTov');
-					  storeTov.setDefaultRootId(data.jing_id)
+					  storeTov.setDefaultRootId(data.jing_id);
 	
 			         storeTov.reload({
 			            params : {
@@ -55,7 +54,6 @@ Ext.define('METS.view.main.ContentController', {
     changeContext:function(path){
     //更新顯示內容
     	var content=this.getView();
-
 	    Ext.Ajax.request({
 			     url: '/api/GetDocByPath',
 			     async :false,
@@ -75,13 +73,9 @@ Ext.define('METS.view.main.ContentController', {
 					 var match=pattern.exec(path);
 				     if(match!=null)
 				     {
-				     	//因為現在資料還沒有被顯示到畫面上，先將要前往的lineId存在viewModel,在afterlayout event處理
-				     	//content.getViewModel().data.gotoLineid=match[2];
 				     	Ext.query(Ext.String.format("#content span.lb[data-lineid='{0}']",match[2]),true)[0].scrollIntoView(Ext.getCmp("content").getEl(),null,false,true,true);
 				     }
-
 			     },
-
 			     failure: function(response, opts) {
 			         console.log('server-side failure with status code ' + response.status);
 			     }
@@ -120,7 +114,7 @@ Ext.define('METS.view.main.ContentController', {
 			startPageLine=endLineNode.attributes['data-lineid'].value;
 			endPageLine=startLineNode.attributes['data-lineid'].value;
 		}
-		var pattern=/^P(\d{4})L(\d{2})$/g
+		var pattern=/^P(\d{4})L(\d{2})$/g;
 		var match=pattern.exec(startPageLine);
 		var startPage=match[1];
 		var startLine=match[2];
@@ -204,7 +198,6 @@ Ext.define('METS.view.main.ContentController', {
 	switchContentImage:function(){
 		var isShowContentImage= this.getViewModel().data.isShowContentImage;
 		Ext.query("span.pb",false).forEach(function(element, index, array){element.setDisplayed(isShowContentImage);});
-		
 	},
     switchOrginalLineBreak:function()
     {
