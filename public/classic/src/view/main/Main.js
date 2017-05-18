@@ -31,13 +31,13 @@ Ext.define('METS.view.main.Main', {
             xtype:'button',
             iconCls:'x-fa fa-bars',
             menu: [{
-                text:'Menu Item 1',
+                text:'上存經文檔案',
                 listeners:{
                     click:function(){
                         Ext.create('Ext.window.Window', {
-                            title: '選擇搜尋範圍',
-                            height: 600,
-                            width: 800,
+                            title: '上傳經文XML檔案',
+                            height: 300,
+                            width: 400,
                             layout: 'fit',
                             items: {  // Let's put an empty grid in just to illustrate fit layout
                                 xtype: 'teip5upload'
@@ -45,10 +45,6 @@ Ext.define('METS.view.main.Main', {
                         }).show();
                     }
                 }
-            },{
-                text:'Menu Item 2'
-            },{
-                text:'Menu Item 3'
             }]
         }]
     },
@@ -88,13 +84,14 @@ Ext.define('METS.view.main.Main', {
 		        	xtype:'treepanel',
 		        	rootVisible:false,
                     hideHeaders:true,
+                    height:'100%',
 		        	listeners:{
 		        		itemclick:'tocItemClick'
 		        	},
 		        	store:{
                         model:'METS.model.Toc',
                         storeId:'sToc',
-                        autoLoad: true,
+                        autoLoad: false,
                         proxy: {
                         type: 'ajax',
                         url: '/api/toc/read',
@@ -114,13 +111,14 @@ Ext.define('METS.view.main.Main', {
 		        	xtype:'treepanel',
 		        	rootVisible:false,
                     hideHeaders:true,
+                    height:'100%',
 		        	listeners:{
 		        		itemclick:'tocItemClick'
 		        	},
 		        	store:{
                         model:'METS.model.Toc',
                         storeId:'sTov',
-                        autoLoad: true,
+                        autoLoad: false,
                         proxy: {
                         type: 'ajax',
                         url: '/api/tov/read',
@@ -135,12 +133,13 @@ Ext.define('METS.view.main.Main', {
 		    },
             {
 		        tooltip: '書目',
-		        iconCls: 'x-fa fa-sitemap',
+		        iconCls: 'x-fa fa-pencil',
                 scrollable:true,
 		        items:[
 		        {
 		        	xtype:'treepanel',
                     id:'categoryByPart',
+                    height:'100%',
                     listeners:{
 		        		itemclick:'categoryItemClick'
 		        	},

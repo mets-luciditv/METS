@@ -10,30 +10,37 @@ var upload = multer({ dest: 'uploads/' })
 var path=require('path')
 var fs=require('fs')
 var teip5xml =require("../lib/teip5loader")
+const winston = require('winston');
 router.post('/upload', upload.single('teip5xml'), function (req, res, next) {
-  console.log(req.file);
-  fs.readFile(req.file.path,'utf8',(err,xml)=>{
-        teip5xml.importXml(xml).then(function(result){
-             
-              fs.unlink(req.file.path,err=>{
-                if(err){
+  winston.info(req.file);
+  if(req.file.mimetype != "text/xml" && req.file.mimetype != "application/xml"){
+       res.json({success:false,msg:"請上傳XML檔案。"});
+        fs.unlink(req.file.path,err=>{
+            if(err){
+                winston.error(err);
+            }
+        });
+  }
+  else{
+        fs.readFile(req.file.path,'utf8',(err,xml)=>{
+                teip5xml.importXml(xml).then(function(result){
+                    res.json({success:true,file:req.file.originalname});
+                    fs.unlink(req.file.path,err=>{
+                        if(err){
+                            winston.error(err);
+                        }
+                    });
+                },function(err){
                     res.json({success:false,msg:err});
-                }
-                else{
-                    if(result.responseHeader.status==0)
-                    {
-                        res.json({success:true,file:req.file.originalname});
-                    }
-                    else{
-                        res.json({success:false,msg:result});
-                    }
-                    
-                }
-            })
-        },function(err){
-            res.json({success:false,msg:err});
+                    fs.unlink(req.file.path,err=>{
+                        if(err){
+                            winston.error(err);
+                        }
+                    });
+                })
         })
-  })
+  }
+  
 
   
 });
@@ -46,7 +53,7 @@ router.get('/search', function(req, res, next) {
                   .set("hl.tag.pre="+encodeURIComponent('<em data-hl-group="$seq">'))
 				  .hl({on:true,fl:"text",snippets:100000,usePhraseHighlighter:true})
                   .fl(["id", "jing_id", "jing_title", "volume_id","volume_title", "author"])
-                  .sort({'volume_id':'asc'})
+                  .sort({'jing_id':'asc','volume_id':'asc'})
     if(req.query.jing_ids instanceof Array){
         query.set( "fq=jing_id:"+encodeURIComponent("("+req.query.jing_ids.join(" OR ")+")"));
     }

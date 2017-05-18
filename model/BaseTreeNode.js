@@ -4,15 +4,15 @@ const Promise = require('promise');
 const Stack =require('stackjs')
 const util=require("util")
 var extend = require('util')._extend;
-module.exports.add= async function (schemaName,tableName,nodes)
-{
     var pool  = mysql.createPool({
         connectionLimit : 10,
         host     : process.env.dbHost,
         user     : process.env.dbUser,
         password : process.env.dbPassword,
-        database : schemaName
+        database : process.env.dbDatabase
     });
+module.exports.add= async function (schemaName,tableName,nodes)
+{
     for(i in nodes){
         var node=nodes[i];
          await insertRow(pool,tableName,node);
@@ -20,7 +20,6 @@ module.exports.add= async function (schemaName,tableName,nodes)
     await rebuildMpttIndex(pool,tableName);
 }
 function insertRow(pool,tableName,node){
-    
     return new Promise(function(resolve,reject){
         var query=pool.query("INSERT INTO ?? SET ?",[tableName,node],function (error, results, fields){
             if(error){
@@ -107,13 +106,6 @@ function loadMpttTree(nodes){
 }
 async function update (schemaName,tableName,nodes)
 {
-     var pool  = mysql.createPool({
-        connectionLimit : 10,
-        host     : process.env.dbHost,
-        user     : process.env.dbUser,
-        password : process.env.dbPassword,
-        database : schemaName
-    });
     for(i in nodes){
         var node=nodes[i];
         await updateRow(pool,tableName,node);
@@ -123,13 +115,6 @@ async function update (schemaName,tableName,nodes)
 module.exports.update = update;
 module.exports.read = async function (schemaName,tableName,id)
 {
-    var pool  = mysql.createPool({
-        connectionLimit : 10,
-        host     : process.env.dbHost,
-        user     : process.env.dbUser,
-        password : process.env.dbPassword,
-        database : schemaName
-    });
     return new Promise(function(resolve, reject) {
         pool.query('SELECT a.* FROM ?? a,?? b where a.lft >= b.lft and a.lft  <= b.rgt and b.id= ? order by a.lft', [tableName,tableName,id], function (error, results, fields) {
             if(error){
@@ -143,13 +128,6 @@ module.exports.read = async function (schemaName,tableName,id)
 
 module.exports.remove = async function (schemaName,tableName,ids)
 {
-    var pool  = mysql.createPool({
-        connectionLimit : 10,
-        host     : process.env.dbHost,
-        user     : process.env.dbUser,
-        password : process.env.dbPassword,
-        database : schemaName
-    });
     for(i in ids){
         var id=ids[i]
         await deleteRow(pool,tableName,id);

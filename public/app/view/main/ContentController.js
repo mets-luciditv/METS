@@ -26,15 +26,17 @@ Ext.define('METS.view.main.ContentController', {
 			         content.getViewModel().notify();         
 					 var storeToc = Ext.data.StoreManager.lookup('sToc');
 					 storeToc.setDefaultRootId(data.jing_id);
-
-			         storeToc.reload({
+					 storeToc.removeAll();
+					 storeToc.setAutoLoad(true);
+			         storeToc.load({
 			            params : {
 			                node:data.jing_id
 			            }
 			         });
 					  var storeTov = Ext.data.StoreManager.lookup('sTov');
 					  storeTov.setDefaultRootId(data.jing_id);
-	
+					storeTov.removeAll();
+					 storeTov.setAutoLoad(true);
 			         storeTov.reload({
 			            params : {
 			                node:data.jing_id

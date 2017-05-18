@@ -11,11 +11,12 @@
         </div>
     </xsl:template>
     <xsl:template match="tei:pb">
+    <xsl:variable name="page_id" select="./@xml:id" />
         <span class="pb">
     <xsl:attribute name="data-pageId">
         <xsl:value-of select="./@xml:id"/>
     </xsl:attribute>
-            <img src="{concat('images/',$jing_id,'/P0001.jpg')}" style="width:100%;"></img>
+            <img src="{concat('images/',$jing_id,'/',$page_id,'.jpg')}" style="width:100%;"></img>
 </span>
 </xsl:template>
     <xsl:template match="tei:div[@type='volume']/tei:div">

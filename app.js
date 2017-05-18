@@ -10,11 +10,12 @@ var toc=require('./routes/toc')
 var tov=require('./routes/tov')
 var compression = require('compression')
 var app = express();
-
+const winston = require('winston');
+winston.level=process.env.LOG_LEVEL||'debug';
+console.log("log level:%s",winston.level)
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
