@@ -5,7 +5,7 @@
     model:'METS.model.SearchResult',
     proxy: {
         type: 'ajax',
-        url: '/api/search',
+        url: '/api/solr/search',
         reader: {
             type: 'json',
             rootProperty:'response.docs'

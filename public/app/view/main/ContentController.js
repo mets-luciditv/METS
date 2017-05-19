@@ -11,7 +11,7 @@ Ext.define('METS.view.main.ContentController', {
     //同時更新顯示內容與目錄
     	var content=this.getView();
 	    Ext.Ajax.request({
-			     url: '/api/GetHighlightDoc',
+			     url: '/api/solr/GetHighlightDoc',
 			     params:{
 			           id:path,
 	                   q:q
@@ -57,7 +57,7 @@ Ext.define('METS.view.main.ContentController', {
     //更新顯示內容
     	var content=this.getView();
 	    Ext.Ajax.request({
-			     url: '/api/GetDocByPath',
+			     url: '/api/solr/GetDocByPath',
 			     async :false,
 			     params:{
 			           id:path

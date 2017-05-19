@@ -1,3 +1,11 @@
+console.log(process)
+process.env= {
+      "dbHost":'localhost',
+      "dbPort":33060,
+      "dbUser":'root',
+      "dbPassword":'A6=t+XQ3ec',
+      'dbDatabase':'METS'
+  };
 var assert = require('assert');
 var teip5loader = require('../lib/teip5loader')
 var DOMParser = require('xmldom').DOMParser;
@@ -12,12 +20,7 @@ var XMLSerializer=require("xmldom").XMLSerializer;
 
 describe('tei p5 loader', function() {
   before(function(){
-  process.env= {
-        "dbHost":'localhost',
-        "dbPort":33060,
-        "dbUser":'root',
-        "dbPassword":'A6=t+XQ3ec'
-    };
+
 });
   describe('#getJingId()', function() {
     it('T010001', function() {
@@ -107,10 +110,6 @@ describe('tei p5 loader', function() {
         it('#2',  function() {
             var volumes=teip5loader.getVolume(xmldoc_2);
             return teip5loader.parseVolume(volumes[0],"A000001").should.eventually.have.properties({volume_id:"V001",volume_title:"卷一"});
-  
-           
-           // teip5loader.parseVolume(volumes[1]).should.have.properties({volume_id:"V002",volume_title:"卷二"})
-            
         });
     });
     describe('#findLineIds', function() {

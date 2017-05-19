@@ -8,6 +8,7 @@ var api = require('./routes/api');
 var category=require('./routes/category')
 var toc=require('./routes/toc')
 var tov=require('./routes/tov')
+var solr=require('./routes/solr')
 var compression = require('compression')
 var app = express();
 const winston = require('winston');
@@ -30,6 +31,7 @@ app.use('/api',api);
 app.use('/api/category',category)
 app.use('/api/toc',toc)
 app.use('/api/tov',tov)
+app.use('/api/solr',solr)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
