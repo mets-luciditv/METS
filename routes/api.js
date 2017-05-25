@@ -46,8 +46,5 @@ router.post('/upload', upload.single('teip5xml'), function (req, res, next) {
 });
 
 
-let patt_id = /^[A-Z]{1}\d{6}V\d{3}$/i;
-let patt_path=/^([A-Z]{1}\d{6})(P\d{4}L\d{2})$/i;
-let patt_jingId=/^([A-Z]{1}\d{6})$/i;
 
 module.exports = router;
