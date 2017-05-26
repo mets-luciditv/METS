@@ -91,8 +91,7 @@
         </div>
      </front>
 <body>
-   <div type="volume" xml:id="V001" n="卷一">
-   
+<milestone unit="volume" xml:id="V001" n="卷一"/>
 <div>
    <pb xml:id="P0001"/>
    <p>
@@ -448,8 +447,7 @@
 <lb xml:id="P0021L14"/>ཅེས་བྱ་བ་ལས། རྣམ་ཀུན་མངོན་པར་རྫོགས་པར་རྟོགས་པའི་སྐབས་ཏེ་བཞི་པའོ།། །།
 </p>
 </div>
-</div>
-   <div type="volume" xml:id="V002" n="卷二">
+<milestone unit="volume" xml:id="V002" n="卷二"/>
 <pb xml:id="P0022"/>
 <div>
 <head>
@@ -651,7 +649,7 @@
 <p>
 <lb xml:id="P0033L02"/>།རྒྱ་གར་གྱི་པཎྜྻི་ཏ་གོ་མི་འཆི་མེད་དང་། ལོ་ཙཱ་བ་དགེ་སློང་བློ་ལྡན་ཤེས་རབ་ཀྱིས་བསྒྱུར་ཅིང་ཞུས་ཏེ་
 <lb xml:id="P0033L03"/>ལེགས་པར་གཏན་ལ་ཕབ་པའོ། །། །
-</p></div></div>
+</p></div>
 </body>
 </text>
 </TEI>

@@ -1,4 +1,4 @@
-console.log(process)
+
 process.env= {
       "dbHost":'localhost',
       "dbPort":33060,
@@ -77,27 +77,34 @@ describe('tei p5 loader', function() {
      describe('#getVolume()', function() {
         it('#1', function() {
             var volumes=teip5loader.getVolume(xmldoc_1);
+           // console.log(volumes);
             volumes.length.should.exactly(1)
         });
         it('#2', function() {
             var volumes=teip5loader.getVolume(xmldoc_2);
-            volumes.length.should.exactly(2)
+        
+            
+             
+           volumes.length.should.exactly(2)
         });
     });
 
 
      describe('#xmldom serialize to xml string', function() {
         it('#1', function() {
+       
             new XMLSerializer().serializeToString(xmldoc_1).should.be.exactly(xml_1);    
         });
         it('#2', function() {
             new XMLSerializer().serializeToString(xmldoc_2).should.be.exactly(xml_2);
         });
     });
+    
          describe('#parseVolume', function() {
         it('#1 轉成文字後，空白的與換行的量有不同。文字部門一至',  function(done) {
           this.timeout(5000);
             var volumes= teip5loader.getVolume(xmldoc_1);
+       //     console.log(new XMLSerializer().serializeToString(volumes[0]))
             teip5loader.parseVolume(volumes[0],"T010001").then(function(data){
               data.should.have.properties({volume_id:"V001",volume_title:"卷一"})
               assert.equal(data.text.replace(/\s/g,""),fs.readFileSync("test/T010001_Text.txt","utf8").replace(/\s/g,""));
@@ -109,9 +116,10 @@ describe('tei p5 loader', function() {
         });
         it('#2',  function() {
             var volumes=teip5loader.getVolume(xmldoc_2);
-            return teip5loader.parseVolume(volumes[0],"A000001").should.eventually.have.properties({volume_id:"V001",volume_title:"卷一"});
+           return teip5loader.parseVolume(volumes[0],"A000001").should.eventually.have.properties({volume_id:"V001",volume_title:"卷一"});
         });
     });
+    
     describe('#findLineIds', function() {
       it('#1',function(){
           var lineIds=teip5loader.findLineIds(xmldoc_1);
@@ -131,4 +139,5 @@ describe('tei p5 loader', function() {
           return teip5loader.importXml(xml_2).catch(console.log).should.eventually.match({"responseHeader":{"status":0}});
       });
     });
+    
 });
