@@ -1,7 +1,7 @@
 var assert = require('assert');
 var should = require('should');
 var solr = require('../routes/solr')
-describe('tei p5 loader', function() {
+describe('solr', function() {
     describe("#parseSearchString()",function(){
         it("#1 &&",function(){
             solr.parseSearchString("པའི་ཚུལ་ &&     རྗེ་བཙུན་").should.be.equal('"པའི་ཚུལ་" && "རྗེ་བཙུན་"')

@@ -27,6 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, process.env.WWW_ROOT||'public')));
 app.use('/javascripts',express.static(path.join(__dirname, 'public/javascripts')));
 app.use('/images',express.static(path.join(__dirname, 'public/images')));
+app.use('/PageImage',express.static("/data/metseditor/pageImage"));
 app.use('/api',api);
 app.use('/api/category',category)
 app.use('/api/toc',toc)

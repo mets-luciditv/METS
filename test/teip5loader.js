@@ -41,7 +41,7 @@ describe('tei p5 loader', function() {
 
     describe('#getAuthors()', function() {
         it('5 authors', function() {
-          teip5loader.getAuthors(xmldoc_1).should.be.deepEqual([ '宗喀巴大師', '語王堅穩尊者', '妙音笑大師', '札帝格西', '札帝格西' ]);
+          teip5loader.getAuthors(xmldoc_1).should.be.deepEqual([ '宗喀巴大師', '語王堅穩尊者', '妙音笑大師', '札帝格西', '巴梭法王' ]);
         });
         it('1 author', function() {
           teip5loader.getAuthors(xmldoc_2).should.be.deepEqual([ '慈尊' ]);

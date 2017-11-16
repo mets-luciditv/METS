@@ -6,7 +6,8 @@ module.exports = {
             "dbHost":'localhost',
             "dbUser":'root',
             "dbPassword":'A6=t+XQ3ec',
-            'dbDatabase':'METS'
+            'dbDatabase':'METS',
+            "pageImageRoot": "/data/metseditor/pageImage"
         },
     env_production : {
         "WWW_ROOT": "public/build/production/METS",
