@@ -11,7 +11,7 @@ module.exports = {
         },
     env_production : {
         "WWW_ROOT": "public/build/production/METS",
-        "PORT": "80",
+        "PORT": "8001",
         "LOG_LEVEL":"info"
     }
     }]
