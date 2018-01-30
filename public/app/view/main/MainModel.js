@@ -6,7 +6,7 @@ Ext.define('METS.view.main.MainModel', {
     alias: 'viewmodel.main',
     data: {
 		name: '月光大藏經',
-        searchtext:'པའི་ཚུལ་',
+        searchtext:'ཤེས་རབ',
         searchScope:'all',
         nowJingId:'',
         nowId:'',

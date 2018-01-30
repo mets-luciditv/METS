@@ -10,7 +10,9 @@ em.highlight {
 #content p:first-child {
 	text-indent: 0em;
 }
-
+body.x-body, div.x-panel-body-default{
+	font-family:'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif,"Monlam Uni OuChan2";
+}
 span.lb.show:after {
 	content:attr(data-lineid) ":";
 }
@@ -19,3 +21,7 @@ span.lb {
 	color: #006400;
 }
 
+@font-face {
+	font-family: "Monlam Uni OuChan2";
+	src: url("../../resources/fonts/Monlam_Uni_OuChan2.ttf");
+}
