@@ -58,7 +58,7 @@ Ext.define('METS.view.main.Main', {
             region:'west',
             floatable: false,
             margin: '5 0 0 0',
-            width: 250,
+            width: 300,
             minWidth: 200,
           //  maxWidth: 400,
             collapsed:false,
@@ -241,7 +241,7 @@ Ext.define('METS.view.main.Main', {
             region: 'east',
             header:false,
             margin: '5 0 0 0',
-            width: 350,
+            width: 400,
             items:[
                 {
                     name:'searchtext',

@@ -17,13 +17,13 @@ Ext.define('METS.view.main.ContentController', {
 	                   q:q
 			     },
 			     success: function(response, opts) {
-			         var data = JSON.parse(response.responseText).response.docs[0];	 
+			         var data = Ext.decode(response.responseText).response.docs[0];
 			         Ext.suspendLayouts();
 			         Ext.data.StoreManager.lookup('sHitFragment').loadRawData(data.hit_fragments);
 					 var mainViewModel=Ext.getCmp("main").getViewModel();
 					 mainViewModel.setData({nowJingId:data.jing_id,nowJingTitle:data.jing_title,nowVolumeId:data.volume_id,nowVolumeTitle:data.volume_title});
-			         content.getViewModel().setData({html:data.html,hitFragmentCount:data.hit_fragments.length,nowHitFragmentSeq:0});
-			         content.getViewModel().notify();         
+			         content.getViewModel().setData({html:data.html,hitFragmentCount:data.hit_fragments.length,nowHitFragmentSeq:0,jingTitle:data.jing_title,volumeTitle:data.volume_title});
+			         content.getViewModel().notify();
 					 var storeToc = Ext.data.StoreManager.lookup('sToc');
 					 storeToc.setDefaultRootId(data.jing_id);
 					 storeToc.removeAll();
@@ -35,17 +35,17 @@ Ext.define('METS.view.main.ContentController', {
 			         });
 					  var storeTov = Ext.data.StoreManager.lookup('sTov');
 					  storeTov.setDefaultRootId(data.jing_id);
-					storeTov.removeAll();
+					 storeTov.removeAll();
 					 storeTov.setAutoLoad(true);
 			         storeTov.reload({
 			            params : {
 			                node:data.jing_id
 			            }
 			         });
-			         content.updateLayout(); 		
+			         content.updateLayout();
 			         Ext.resumeLayouts(true);
 					 content.setScrollY(0);
-					
+
 			     },
 
 			     failure: function(response, opts) {
@@ -67,7 +67,7 @@ Ext.define('METS.view.main.ContentController', {
 			         Ext.suspendLayouts();
 					 var mainViewModel=Ext.getCmp("main").getViewModel();
 					 mainViewModel.setData({nowJingId:data.jing_id,nowJingTitle:data.jing_title,nowVolumeId:data.volume_id,nowVolumeTitle:data.volume_title});
-			         content.getViewModel().setData({html:data.html[0],hitFragmentCount:0,nowHitFragmentSeq:0});
+			         content.getViewModel().setData({html:data.html[0],hitFragmentCount:0,nowHitFragmentSeq:0,jingTitle:data.jing_title,volumeTitle:data.volume_title});
 			         content.getViewModel().notify();
 			         content.updateLayout(); 
 			         Ext.resumeLayouts(true);

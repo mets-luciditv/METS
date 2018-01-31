@@ -8,6 +8,8 @@
         html:"",
         hitFragmentCount:0,
         nowHitFragmentSeq:0,
-        isShowContentImage:false
+        isShowContentImage:false,
+        jingTitle:"",
+        volume_title:""
     }
 });

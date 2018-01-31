@@ -93,6 +93,12 @@
             		click:'refAndCopy'
             	}
 			},
+			{
+				xtype:'label',
+				bind:{
+					text:'{jingTitle} {volumeTitle}'
+				}
+			},
             '->',
             {
             	xtype:'button',

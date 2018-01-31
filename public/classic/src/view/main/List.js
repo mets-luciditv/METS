@@ -46,7 +46,7 @@ Ext.define('METS.view.main.List', {
     },
     columns: [
         { text: '筆數',  dataIndex: 'hit_count', flex: 1 },
-        { text: '經號', dataIndex: 'jing_id', flex: 2 },
+        { text: '經號', dataIndex: 'jing_id', flex: 1 },
         { text: '經名', dataIndex: 'jing_title', flex: 2 },
         { text: '卷', dataIndex: 'volume_title', flex: 1 },
         { text: '作譯者', dataIndex: 'author', flex: 2 }
